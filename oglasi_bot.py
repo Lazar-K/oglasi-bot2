@@ -8,14 +8,15 @@ from oauth2client.service_account import ServiceAccountCredentials
 # === PODESI OVO ===
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
+SHEET_ID = os.getenv("SHEET_ID")  # Dodaj u GitHub Secrets
+
+SERVICE_FILE = "service-account.json"
 API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/1"
 WEB_URL = "https://efee.etf.unibl.org/simple/oglasi/godina/1"
 
 bot = Bot(token=TELEGRAM_TOKEN)
 
-SHEET_ID = os.getenv("SHEET_ID")  # Dodaj u GitHub Secrets
-SERVICE_FILE = "service-account.json"
-
+# === GOOGLE SHEETS SETUP ===
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_FILE, scope)
