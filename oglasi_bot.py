@@ -54,9 +54,7 @@ async def main():
             f"🔗 <a href='{WEB_URL}'>Detalji</a> "     # link na oglas u italiku
          )
          await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
-
-         # upiši ID u sheet
-            sheet.append_row([ad['id']])
+         sheet.append_row([ad['id']])
 
     except Exception as e:
             print("Greška:", e)
