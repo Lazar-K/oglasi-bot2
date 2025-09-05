@@ -4,8 +4,8 @@ from telegram import Bot
 import os
 
 # === PODESI OVO ===
-TELEGRAM_TOKEN = "8451243757:AAHiMX_flRQU8LUHQiK6LY_Rx4T9qav-QjE"
-CHAT_ID = "-1003018319484"
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/1"
 WEB_URL = "https://efee.etf.unibl.org/simple/oglasi/godina/1"
 
