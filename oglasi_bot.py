@@ -2,6 +2,8 @@ import asyncio
 import requests
 from telegram import Bot
 import os
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # === PODESI OVO ===
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -10,27 +12,29 @@ API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/1"
 WEB_URL = "https://efee.etf.unibl.org/simple/oglasi/godina/1"
 
 bot = Bot(token=TELEGRAM_TOKEN)
-FILENAME = "sent_ads.txt"
+
+SHEET_ID = os.getenv("SHEET_ID")  # Dodaj u GitHub Secrets
+SERVICE_FILE = "service-account.json"
+
+scope = ["https://spreadsheets.google.com/feeds",
+         "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_FILE, scope)
+client = gspread.authorize(creds)
+sheet = client.open_by_key(SHEET_ID).sheet1
 
 async def get_first_year_ads():
     r = requests.get(API_URL)
     r.raise_for_status()
     data = r.json()
     # filtriraj samo oglase sa Prve godine
-    first_year_ads = [
+    return [
         ad for ad in data
         if ad.get("oglasnaPloca", {}).get("id") == 1
     ]
-    return first_year_ads
 
 async def main():
-    sent_ads = set()
-    if os.path.exists(FILENAME):
-        
-        with open(FILENAME, "r", encoding="utf-8") as f:
-            for line in f:
-                sent_ads.add(line.strip())
-
+    sent_ads = set(sheet.col_values(1))
+    
     try:
         ads = await get_first_year_ads()
         new_ads = []
@@ -50,10 +54,8 @@ async def main():
          )
          await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
 
-         # upiši poslate id-ove u fajl
-         with open(FILENAME, "w", encoding="utf-8") as f:
-                for ad_id in sent_ads:
-                    f.write(ad_id + "\n")
+         # upiši ID u sheet
+            sheet.append_row([ad['id']])
 
     except Exception as e:
             print("Greška:", e)
