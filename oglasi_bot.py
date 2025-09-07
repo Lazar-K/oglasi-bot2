@@ -59,7 +59,7 @@ async def main():
               for prilog in prilozi:
                   naziv = prilog.get("originalniNaziv", "Prilog")
                   # ovdje ide ID od oglasa, ne od priloga
-                  prilog_link = f"{PRILOG_URL}/{ad_id}/download"
+                  prilog_link = f"{PRILOG_URL}{ad_id}/download"
                   message += f"🔗 <a href='{prilog_link}'>{naziv}</a>"
         
          await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
