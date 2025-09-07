@@ -49,6 +49,7 @@ async def main():
 
         # pošalji nove oglase
         for ad in new_ads:
+         ad_id = ad['id']
          message = (
             f"🆕 <b>{ad['naslov']}</b>\n\n"      # bold naslov
             f"{ad['sadrzaj']}\n\n"              # sadržaj odvojen praznim linijama
