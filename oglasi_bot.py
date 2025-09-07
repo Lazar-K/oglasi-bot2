@@ -12,6 +12,7 @@ SHEET_ID = os.getenv("SHEET_ID")  # Dodaj u GitHub Secrets
 
 SERVICE_FILE = "service-account.json"
 API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/1"
+PRILOG_URL = "https://efee.etf.unibl.org:8443/api/public/oglasi/"
 WEB_URL = "https://efee.etf.unibl.org/simple/oglasi/godina/1"
 
 bot = Bot(token=TELEGRAM_TOKEN)
@@ -51,8 +52,16 @@ async def main():
          message = (
             f"🆕 <b>{ad['naslov']}</b>\n\n"      # bold naslov
             f"{ad['sadrzaj']}\n\n"              # sadržaj odvojen praznim linijama
-            f"🔗 <a href='{WEB_URL}'>Detalji</a> "     # link na oglas u italiku
          )
+         # provjera ima li priloga
+         prilozi = ad.get("oglasPrilozi", [])
+         if prilozi:
+              for prilog in prilozi:
+                  naziv = prilog.get("originalniNaziv", "Prilog")
+                  # ovdje ide ID od oglasa, ne od priloga
+                  prilog_link = f"{PRILOG_URL}/{ad_id}/download"
+                  message += f"🔗 <a href='{prilog_link}'>{naziv}</a>"
+        
          await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
          sheet.append_row([ad['id']])
 
