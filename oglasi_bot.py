@@ -6,7 +6,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # === PODESI OVO ===
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN2")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 SHEET_ID = os.getenv("SHEET_ID")  # Dodaj u GitHub Secrets
 
