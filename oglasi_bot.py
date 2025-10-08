@@ -36,7 +36,8 @@ async def get_first_year_ads():
 
 async def main():
     sent_ads = set(sheet.col_values(1))
-    
+    message = (f"🆕 <b>"lolol"</b>\n\n")     
+    bot.send_message(text=message, parse_mode="HTML")
     try:
         ads = await get_first_year_ads()
         new_ads = []
