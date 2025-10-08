@@ -11,7 +11,7 @@ CHAT_ID = os.getenv("CHAT_ID2")
 SHEET_ID = os.getenv("SHEET_ID2")  # Dodaj u GitHub Secrets
 
 SERVICE_FILE = "service-account.json"
-API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/1"
+API_URL = "https://efee.etf.unibl.org:8443/api/public/oglasne-ploce/2"
 PRILOG_URL = "https://efee.etf.unibl.org:8443/api/public/oglasi/"
 WEB_URL = "https://efee.etf.unibl.org/simple/oglasi/godina/1"
 
