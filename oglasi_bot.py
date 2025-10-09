@@ -79,6 +79,12 @@ async def main():
         sent_ads = set()
 
     ads = await get_first_year_ads()
+    print("🔎 Primer prvog oglasa sa API-ja:")
+    if ads:
+        from pprint import pprint
+        pprint(ads[0])
+    else:
+        print("⚠️ API nije vratio oglase.")
     new_ads = []
 
     for ad in ads:
