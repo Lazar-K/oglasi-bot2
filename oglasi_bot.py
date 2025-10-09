@@ -35,39 +35,46 @@ async def get_first_year_ads():
     ]
 
 async def main():
+    print("=== Start programa ===")
     sent_ads = set(sheet.col_values(1))
-         
+    print(f"✅ Učitano {len(sent_ads)} već poslatih oglasa iz Google Sheets")
+
     try:
         ads = await get_first_year_ads()
+        print(f"✅ Učitano {len(ads)} oglasa sa servera")
+
         new_ads = []
 
         for ad in ads:
-           ad_id = str(ad.get("id"))
-           if ad_id not in sent_ads:
-            new_ads.append(ad)
-            sent_ads.add(ad_id)
+            ad_id = str(ad.get("id"))
+            if ad_id not in sent_ads:
+                new_ads.append(ad)
+                sent_ads.add(ad_id)
 
-        # pošalji nove oglase
+        print(f"🆕 Pronađeno {len(new_ads)} novih oglasa")
+
         for ad in new_ads:
-         ad_id = ad['id']
-         message = (
-            f"🆕 <b>{ad['naslov']}</b>\n\n"      # bold naslov
-            f"{ad['sadrzaj']}\n\n"              # sadržaj odvojen praznim linijama
-         )
-         # provjera ima li priloga
-         prilozi = ad.get("oglasPrilozi", [])
-         if prilozi:
-              for prilog in prilozi:
-                  naziv = prilog.get("originalniNaziv", "Prilog")
-                  # ovdje ide ID od oglasa, ne od priloga
-                  prilog_link = f"{PRILOG_URL}{ad_id}/download"
-                  message += f"🔗 <a href='{prilog_link}'>{naziv}</a>"
-        
-         await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
-         sheet.append_row([ad['id']])
+            ad_id = ad["id"]
+            message = (
+                f"🆕 <b>{ad['naslov']}</b>\n\n"
+                f"{ad['sadrzaj']}\n\n"
+            )
+            prilozi = ad.get("oglasPrilozi", [])
+            if prilozi:
+                for prilog in prilozi:
+                    naziv = prilog.get("originalniNaziv", "Prilog")
+                    prilog_link = f"{PRILOG_URL}{ad_id}/download"
+                    message += f"🔗 <a href='{prilog_link}'>{naziv}</a>\n"
+
+            print(f"📤 Šaljem oglas: {ad['naslov']}")
+            await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="HTML")
+            sheet.append_row([ad["id"]])
+
+        print("✅ Gotovo slanje oglasa!")
 
     except Exception as e:
-            print("Greška:", e)
+        print("❌ Greška:", e)
+
 
 
 if __name__ == "__main__":
